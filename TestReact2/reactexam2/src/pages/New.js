@@ -1,7 +1,14 @@
+import DiaryEditor from "../components/DiaryEditor"
+
+const getStringDate = (date) => {
+    return date.toISOString().slice(0, 10)
+}
+
 const New = () => {
+
     return (
         <div>
-            <h2>New</h2>
+            <DiaryEditor />
         </div>
     )
 }
