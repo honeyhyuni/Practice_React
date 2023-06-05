@@ -5,7 +5,7 @@ import Home from "./pages/Home";
 import New from "./pages/New";
 import Edit from "./pages/Edit";
 import Diary from "./pages/Diary";
-import React, { useReducer, useRef } from "react";
+import React, { useEffect, useReducer, useRef } from "react";
 
 
 const reducer = (state, action) => {
@@ -30,6 +30,7 @@ const reducer = (state, action) => {
     default:
       return state;
   }
+  localStorage.setItem("diary", JSON.stringify(newState))
   return newState;
 }
 
@@ -37,42 +38,53 @@ export const DiaryStateContext = React.createContext();
 export const DiaryDispatchContext = React.createContext();
 
 
-const dummyData = [
-  {
-    id: 1,
-    emotion:1,
-    content : "오늘의일기1",
-    date : 1685672712809
-  },
-  {
-    id: 2,
-    emotion:2,
-    content : "오늘의일기2",
-    date : 1685672712810
-  },
-  {
-    id: 3,
-    emotion:3,
-    content : "오늘의일기3",
-    date : 1685672712811
-  },
-  {
-    id: 4,
-    emotion:4,
-    content : "오늘의일기4",
-    date : 1685672712812
-  },
-  {
-    id: 5,
-    emotion:5,
-    content : "오늘의일기5",
-    date : 1685672712813
-  },
-]
+// const dummyData = [
+//   {
+//     id: 1,
+//     emotion:1,
+//     content : "오늘의일기1",
+//     date : 1685672712809
+//   },
+//   {
+//     id: 2,
+//     emotion:2,
+//     content : "오늘의일기2",
+//     date : 1685672712810
+//   },
+//   {
+//     id: 3,
+//     emotion:3,
+//     content : "오늘의일기3",
+//     date : 1685672712811
+//   },
+//   {
+//     id: 4,
+//     emotion:4,
+//     content : "오늘의일기4",
+//     date : 1685672712812
+//   },
+//   {
+//     id: 5,
+//     emotion:5,
+//     content : "오늘의일기5",
+//     date : 1685672712813
+//   },
+// ]
 
 
 function App() {
-  const [data, dispatch] = useReducer(reducer, dummyData);
+
+  useEffect(() => {
+    const localData = localStorage.getItem('diary');
+    if(localData){
+      const diaryList = JSON.parse(localData).sort((a, b)=> parseInt(b.id) - parseInt(a.id));
+      dataId.current = diaryList[0].id + 1
+
+      dispatch({type:"INIT", data:diaryList})
+    }
+  }, [])
+
+  const [data, dispatch] = useReducer(reducer, []);
 
   const dataId = useRef(0);
 
