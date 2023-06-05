@@ -78,9 +78,12 @@ function App() {
     const localData = localStorage.getItem('diary');
     if(localData){
       const diaryList = JSON.parse(localData).sort((a, b)=> parseInt(b.id) - parseInt(a.id));
-      dataId.current = diaryList[0].id + 1
 
-      dispatch({type:"INIT", data:diaryList})
+      if(diaryList.length >= 1){
+        dataId.current = diaryList[0].id + 1
+        dispatch({type:"INIT", data:diaryList})
+      }
+
     }
   }, [])
 
